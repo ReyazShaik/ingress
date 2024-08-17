@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-ingress
+  annotations:
+    internetbankingrepo.ingress.kubernetes.io/ssl-redirect: "false"
+    internetbankingrepo.ingress.kubernetes.io/use-regex: "true"
+    internetbankingrepo.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: internetbankingrepo
+  rules:
+  - http:
+      paths:
+      - path: /internetbankingrepo(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: internetbankingrepo
+            port:
+              number: 80
+      - path: /mobilebankingrepo(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: mobilebankingrepo
+            port:
+              number: 80
+      - path: /(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: internetbankingrepo
+            port:
+              number: 80
